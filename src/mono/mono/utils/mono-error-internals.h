@@ -343,7 +343,7 @@ GetLastError (void)
 #if HOST_X86
     return __readfsdword (0x34);
 #elif HOST_AMD64
-    return __readgsdword (0x68);
+    return *(unsigned long *)((char *)NtCurrentTeb()+0x68);
 #else
 #error Unreachable, see above.
 #endif
@@ -367,7 +367,7 @@ mono_SetLastError (unsigned long err)
 #if HOST_X86
     __writefsdword (0x34, err);
 #elif HOST_AMD64
-    __writegsdword (0x68, err);
+    *(unsigned long *)((char *)NtCurrentTeb()+0x68) = err;
 #else
 #error Unreachable, see above.
 #endif
